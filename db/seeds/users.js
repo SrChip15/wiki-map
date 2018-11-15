@@ -1,5 +1,20 @@
 exports.seed = function(knex, Promise) {
-  return knex('users').del()
+  return knex('map_places').del()
+    .then( function () {
+      return knex('user_favourites').del();
+    })
+    .then( function () {
+      return knex('user_contributions').del();
+    })
+    .then( function () {
+      return knex('places').del();
+    })
+    .then( function () {
+      return knex('maps').del();
+    })
+    .then( function () {
+      return knex('users').del();
+    })
     .then(function () {
       return Promise.all([
         knex('users').insert({id: 1, email: 'alice@gmail.com', password: '123456'}),
@@ -30,10 +45,10 @@ exports.seed = function(knex, Promise) {
     })
     .then(function () {
       return Promise.all([
-        knex('places').insert({id: 1, name: 'CN Tower', image: 'https://media-cdn.tripadvisor.com/media/photo-s/0e/2b/93/b7/cn-tower.jpg', description: 'Tallest point in Toronto', place_lat: 43.6426, place_long: 79.3871}),
-        knex('places').insert({id: 2, name: 'Rogers Center', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Toronto_-_ON_-_Rogers_Centre_%28Nacht%29.jpg/338px-Toronto_-_ON_-_Rogers_Centre_%28Nacht%29.jpg', description: 'Roof does not open on rainy days', place_lat: 43.6414, place_long: 79.3894}),
-        knex('places').insert({id: 3, name: 'Ripleys Aquarium', image: 'https://sparkleshinylove.com/wp-content/uploads/2013/11/image-1024x768.jpg', description: 'Try not to get seasick', place_lat: 43.6424, place_long: 79.3860}),
-        knex('places').insert({id: 4, name: 'Union Station', image: 'https://toronto.citynews.ca/wp-content/blogs.dir/sites/10/2018/03/09/union-station.jpg', description: 'Under construction', place_lat: 43.6453, place_long: 79.3806})
+        knex('places').insert({id: 1, name: 'CN Tower', image: 'https://media-cdn.tripadvisor.com/media/photo-s/0e/2b/93/b7/cn-tower.jpg', description: 'Tallest point in Toronto', place_lat: 43.6426, place_long: 79.3871, category: 'attractions', url: 'https://www.cntower.ca/intro.html'}),
+        knex('places').insert({id: 2, name: 'Rogers Center', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Toronto_-_ON_-_Rogers_Centre_%28Nacht%29.jpg/338px-Toronto_-_ON_-_Rogers_Centre_%28Nacht%29.jpg', description: 'Roof does not open on rainy days', place_lat: 43.6414, place_long: 79.3894, category: 'attractions', url: 'https://www.mlb.com/bluejays/ballpark'}),
+        knex('places').insert({id: 3, name: 'Ripleys Aquarium', image: 'https://sparkleshinylove.com/wp-content/uploads/2013/11/image-1024x768.jpg', description: 'Try not to get seasick', place_lat: 43.6424, place_long: 79.3860, category: 'attractions', url: 'https://www.ripleyaquariums.com/canada'}),
+        knex('places').insert({id: 4, name: 'Union Station', image: 'https://toronto.citynews.ca/wp-content/blogs.dir/sites/10/2018/03/09/union-station.jpg', description: 'Under construction', place_lat: 43.6453, place_long: 79.3806, category: 'service', url: 'https://torontounion.ca'})
       ]);
     })
     .then(function() {
