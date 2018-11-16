@@ -1,6 +1,5 @@
 
 const args = process.argv.slice(2);
-const bcrypt = req
 
 const knex = require("knex")({
   client: "postgresql",
@@ -13,38 +12,39 @@ const knex = require("knex")({
   }
 });
 
-module.exports = function makeUserDataHelpers(db) {
+module.exports = function makeUserDataHelpers(knex) {
   return {
 
 // Create User
     createUser: (email, password, callback) => {
       return knex('users')
-        .insert({'email': email, 'password': password})
-        .asCallback((err, res) => {
-          if (err) {
-            callback(err);
-            process.exit(0);
-          } else {
-            callback(null, res);
-            process.exit(0);
-          }
-        });
+      .insert({'email': email, 'password': password})
+      .asCallback((err, res) => {
+        if (err) {
+          callback(err);
+          process.exit(0);
+        } else {
+          callback(null, res);
+          process.exit(0);
+        }
+      });
     },
 
 // Find user by email and password
     userEmailPasswordById: (userid) => {
       const useridInt = parseInt(userid);
-      return knex.select("email", "password").from("users")
-        .where("id", useridInt)
-        .asCallback(function(err, res) {
-          if (err) {
-            callback(err);
-            process.exit(0);
-          } else {
-            callback(null, res);
-            process.exit(0);
-          }
-        });
+      return knex.select("email", "password")
+      .from("users")
+      .where("id", useridInt)
+      .asCallback((err, res) => {
+        if (err) {
+          callback(err);
+          process.exit(0);
+        } else {
+          callback(null, res);
+          process.exit(0);
+        }
+      });
     },
 
 
@@ -53,15 +53,17 @@ module.exports = function makeUserDataHelpers(db) {
       const emailStr = email.toString();
       const passwordStr = password.toString();
       return knex.select('id').from('users')
-        .where('email', emailStr).andWhere('password', passwordStr).from('users')
-        .asCallback(function(err, res) {
-          if (err) {
-            callback(err);
-            process.exit(0);
-          } else {
-            callback(null, res);
-            process.exit(0);
-          }
-        });
+      .where('email', emailStr)
+      .andWhere('password', passwordStr)
+      .from('users')
+      .asCallback((err, res) => {
+        if (err) {
+          callback(err);
+          process.exit(0);
+        } else {
+          callback(null, res);
+          process.exit(0);
+        }
+      });
     }
 };
