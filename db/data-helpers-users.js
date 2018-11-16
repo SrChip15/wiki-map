@@ -1,5 +1,5 @@
 const args = process.argv.slice(2);
-const settings = require("../.env"); // settings.json
+// const settings = require("../.env"); // settings.json
 const knex = require("knex")({
   client: 'postgresql',
   connection: {
@@ -11,49 +11,61 @@ const knex = require("knex")({
   }
 });
 
-// module.exports = function makeDataHelpers(db) {
-//   return {
+module.exports = function makeDataHelpers(db) {
+  return {
 
 // Create User
-
+  createUser: (email, password, callback) => {
+    return knex('users').insert({'email': email, 'password': password})
+    .asCallback((err, res) => {
+      if (err) {
+        callback(err);
+        process.exit(0);
+      } else {
+        callback(null, res);
+        process.exit(0);
+      }
+    });
+  },
 
 // Find user
-  const userEmailPasswordById = (userid) => {
+  userEmailPasswordById: (userid, callback) => {
     const useridInt = parseInt(userid);
     return knex.select('email', 'password').from('users')
-      .where('id', useridInt)
-      .asCallback(function(err, rows) {
-    if (err) return console.error(err);
-    printResult(rows);
-    process.exit(0);
+    .where('id', useridInt)
+    .asCallback(function(err, rows) {
+    if (err) {
+        callback(err);
+        process.exit(0);
+      } else {
+        callback(null, res);
+        process.exit(0);
+      }
     });
-  }
-    // userEmailPasswordById(args);
+  },
+
+  // userEmailPasswordById(args, (person) => {
+  //   console.log('this is', person);
+  // });
 
     //         by email and password
-  const useridByEmailPassword = (email, password) => {
-    const emailStr = email.toString();
-    console.log(password)
-    const passwordStr = password.toString();
-    console.log(emailStr, passwordStr)
-    return knex.select('id').from('users')
-    .where('email', emailStr).andWhere('password', passwordStr).from('users')
-    .asCallback(function(err, rows) {
-      if (err) return console.error(err);
-      printResult(rows);
-      process.exit(0);
-    });
-  }
+  // const useridByEmailPassword = (email, password, callback) => {
+  //   const emailStr = email.toString();
+  //   console.log(password)
+  //   const passwordStr = password.toString();
+  //   return knex.select('id').from('users')
+  //   .where('email', emailStr).andWhere('password', passwordStr).from('users')
+  //   .asCallback(function(err, rows) {
+  //     if (err) callback(err);
+  //     callback(rows);
+  //     process.exit(0);
+  //   });
+  // }
 
-  // useridByEmailPassword(args[0], args[1]);
+  // useridByEmailPassword(args[0], args[1], (test) => {
+  //   console.log(test);
+  // });
 
-
-
-  const printResult = (enter) => {
-    enter.forEach((element) => {
-      console.log(element)
-    });
-  }
 
 
 
