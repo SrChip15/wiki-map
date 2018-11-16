@@ -1,5 +1,5 @@
 {
-  "name": "node-skeleton",
+  "name": "wiki-map",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -9,7 +9,11 @@
     "local": "./node_modules/.bin/nodemon --ignore public/",
     "knex": "./node_modules/.bin/knex"
   },
-  "author": "Lighthouse Labs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AaLai/Midterm-Project.git"
+  },
+  "authors": "Aaron Lai, SriNath, Eric Zhao",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -18,7 +22,7 @@
     "dotenv": "^2.0.0",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
-    "knex": "^0.11.7",
+    "knex": "^0.11.10",
     "knex-logger": "^0.1.0",
     "method-override": "^3.0.0",
     "morgan": "^1.7.0",
