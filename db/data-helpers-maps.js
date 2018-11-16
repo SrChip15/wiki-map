@@ -11,7 +11,7 @@ const knex = require("knex")({
 });
 
 const generateRandomString = () => {
-  let r = Math.random().toString(36).substring(9);
+  let r = Math.random().toString(36).substring(7);
   return r;
 };
 
@@ -43,35 +43,37 @@ module.exports = function makeMapDataHelpers(knex) {
 
 // Delete map
   deleteMap: (mapid, callback) => {
-    const mapidInt = parseInt(mapid);
+    const mapIdInt = parseInt(mapid);
     return Promise.all([
       knex('user_contributions')
-      .where('map_id', mapidInt)
+      .where('map_id', mapIdInt)
       .del(),
       knex('user_favourites')
-      .where('map_id', mapInt)
+      .where('map_id', mapIdInt)
       .del()
     ])
     .then(() => {
       return knex('places')
-      .where('map_id', mapInt)
+      .where('map_id', mapIdInt)
       .del();
     })
     .then(() => {
       return knex('maps')
-      .where('map_id', mapInt)
+      .where('id', mapIdInt)
       .del();
-    })
-    .asCallback((err, res) => {
-      if (err) {
-        callback(err);
-        process.exit(0);
-      } else {
-        callback(null, res);
-        process.exit(0);
-      }
     });
   },
+
+  // deleteMap(args)
+  //   .then((res) => {
+  //     console.log('map is now gone', res)
+  //     process.exit(0);
+  //   })
+  //   .catch((err) => {
+  //     console.error(err);
+  //     process.exit(1);
+  //   })
+
 
     // Find map
     //         by URL
