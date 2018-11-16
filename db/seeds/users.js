@@ -22,13 +22,16 @@ exports.seed = function(knex, Promise) {
       return knex('users').insert({id: 3, email: 'charlie@lighthouselabs.ca', password: 'RubberDuck'});
     })
     .then(function () {
-      return knex('maps').insert({id: 1, url: 'https://google.ca', name: 'Google', description: 'Hey Google, How do I SQL?'});
+      return knex('maps').insert({id: 1, url: '1jh2', name: 'Attractions', description: 'All the interesting stuff happens here'});
     })
     .then(function () {
-      return knex('maps').insert({id: 2, url: 'https://microsoft.ca', name: 'Microsoft', description: 'Is there a microsoft in Canada?'});
+      return knex('maps').insert({id: 2, url: 'fdsja3', name: 'Food and Drink', description: 'These tacos are delicious!'});
     })
     .then(function () {
-      return knex('maps').insert({id: 3, url: 'https://apple.ca', name: 'Apple', description: 'Apples are delicious'});
+      return knex('maps').insert({id: 3, url: '8t9nv23', name: 'Services', description: 'Hospital? Social Services? Bus station?'});
+    })
+    .then(function () {
+      return knex('maps').insert({id: 4, url: 'th423', name: 'Shopping', description: 'Shop till you drop!'})
     })
     .then(function () {
       return Promise.all([
