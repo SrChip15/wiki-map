@@ -56,6 +56,8 @@ app.use(express.static("public"));
 
 // pass the knex db connection object to data helpers to perform DB ops
 const dataHelpers = require("./db/data-helpers-places.js")(knex);
+const dataHelpersMaps = require("./db/data-helpers-maps.js")(knex);
+const dataHelpersUsers = require("./db/data-helpers-users.js")(knex);
 
 // Mount all resource routes
 app.use("/api/users", usersRoutes(knex));
