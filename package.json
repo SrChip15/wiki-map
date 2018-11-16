@@ -9,6 +9,10 @@
     "local": "./node_modules/.bin/nodemon --ignore public/",
     "knex": "./node_modules/.bin/knex"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AaLai/Midterm-Project.git"
+  },
   "authors": "Aaron Lai, SriNath, Eric Zhao",
   "license": "ISC",
   "dependencies": {
