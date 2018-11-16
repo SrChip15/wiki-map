@@ -12,9 +12,10 @@ module.exports = function makeDataHelpers(knex) {
       placeLong,
       category,
       placeURL,
-      mapId
+      mapId,
+      callback
     ) {
-      knex("places")
+      return knex("places")
         .returning("id")
         .insert({
           name: name,
@@ -25,17 +26,24 @@ module.exports = function makeDataHelpers(knex) {
           category: category,
           place_url: placeURL,
           map_id: mapId
+        })
+        .then(id => {
+          callback(id);
         });
     },
 
     // Modify place
-    editPlace: function(placeId, ...args) {
+    editPlace: function(placeId, name, callback) {
+      // The below method signature and code could be repurposed for use
+      // after building out the MVP
+
+      // editPlace: function(placeId, ...args, callback) {
       // Var args to offer users flexibility
       // However, at the insertion site, order priority must be maintained,
       // meaning, pass received values (tagged by form approp) in the right order
       // as below and for unreceived values either pass a falsey value or even better
       // just pass false
-      const [
+      /* const [
         name,
         imageURL,
         description,
@@ -72,18 +80,30 @@ module.exports = function makeDataHelpers(knex) {
 
       if (placeURL) {
         payload.place_url = placeURL;
-      }
+      } */
+      const payload = {
+        name: name
+      };
+
       // now payload is packed with the updated column info and ready for update
-      knex("places")
-        .where("placeId")
-        .update(payload);
+      return knex("places")
+        .where("id", placeId)
+        .update(payload)
+        .then(rows => {
+          callback(rows);
+        });
     },
 
     // Delete place
-    deletePlace: function(placeId) {
-      knex("places")
+    deletePlace: function(placeId, callback) {
+      return knex("places")
         .where({ id: placeId })
-        .del();
+        .del()
+        .then(rows => {
+          // TODO - delete in production
+          console.log(`Deleted ${rows} record(s)`);
+          callback(rows);
+        });
     },
 
     // Find place by place_id
