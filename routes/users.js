@@ -1,67 +1,69 @@
 "use strict";
-/*
-Browse/List/Index: GET /photos
-Create/Add: POST /photos
-Read/Show: GET /photos/:id
-Update/Edit: PUT /photos/:id
-Remove/Destroy: DELETE /photos/:id
 
-
-*/
 const express = require("express");
 const router = express.Router();
-const DataHelpers = require("...DataHelpers");
-module.exports = function(knex) {
-  // render templateVars
+// const DataHelpers = require("...DataHelpers");
+const bcrypt = require("bcryptjs");
 
 
-  router.get('/', (req, res) => {
-    if (req.session) {
-      res.render('index', { name: req.session.name });
-    } else {
-      res.render('index');
-    }
-  })
-  
-  router.get("/users", (req, res) => {
-    // const user = knex('users').select(*).where('id', req.session.user_id);
-    // const favoritesList = knex(); // connect to the favorite
-    // const contributionsList = knex(); //
-    // .select("*")
-    // .from("users")
-    //   .then(results =>
-    //   {
-    //     const templateVars = {
-    //       user: req.body.user_id,
-    //       favorites:,
-    //       contributions:,
-    //       makers:
-    //     };
-    //   res.json(results); //???
-    // });
+/* example by default
+router.get("/users", (req, res) => {
+    const user = knex('users').select(*).where('id', req.session.user_id);
+    const favoritesList = knex(); // connect to the favorite
+    const contributionsList = knex(); //
+    .select("*")
+    .from("users")
+      .then(results =>
+      {
+        const templateVars = {
+          user: req.body.user_id,
+          favorites:,
+          contributions:,
+          makers:
+        };
+      res.json(results); //???
+    });
     res.send("welcome");
+  });
+*/
+
+//export a function
+module.exports = function(knex) {
+  const dataHelpers = require('../lib/Datahelpers')(knex);
+
+  router.get("/", (req, res) => {
+    if (req.session) {
+      res.render("index", { name: req.session.name });
+    } else {
+      res.render("index");
+    }
   });
 
   // verify the user information
   router.get("/login", (req, res) => {
+    res.render('index');
     res.send("this is the login page");
   });
+
   router.post("/login", (req, res) => {
+    console.log("WAT", req.body);
     if (req.body.username && req.body.password) {
-      DataHelpers.loginUser(req.body.username, req.body.password, function(
-        err,
-        userObj
-      ) {
-        if (err) throw err;
+      DataHelpers.loginUser(req.body.username, req.body.password, function (err, userObj) {
+        if (err) console.log("error", err); // how to use the throw error
         if (userObj) {
-          //save the cookiesession {id, email, name};
+          req.session.user_id = userObj.id;
+          req.session.email = userObj.email;
+          // req.session.name = userObj.name;
           res.redirect("/");
         } else {
           res.redirect("/login");
         }
       });
+      res.send("LOGGED IN");
     }
+    console.log("HELLO");
   });
+
   router.post("/logout", (req, res) => {
     //clear the cookie session
     // or delete the cookieSession;
@@ -69,24 +71,19 @@ module.exports = function(knex) {
   });
 
   router.get("/register", (req, res) => {
-    res.render("register");
-    // res.render('register');
+    res.render("register"); // make the ejs
   });
 
-  // insert the input info into database
+  // insert the input info into database! have not done yet
   router.post("/register", (req, res) => {
-    if ((req.body.email && req.body.name) {
-      DataHelpers.createUser(
-        req.body.email,
-        req.body.password,
-        (err, xxx) => { 
-          if (err) throw err;
-          req.body.user_id = arrIds[0]; //user the seesion later
-          req.body.email;
-          req.body.password = ;
-          res.redirect("/login"); // to the main page??
-        }
-      );
+    if (req.body.email && req.body.name) {
+      DataHelpers.createUser(req.body.email, req.body.password, (err, xxx) => {
+        if (err) throw err;
+        req.body.user_id = arrIds[0]; //user the seesion later
+        req.body.email;
+        req.body.password;
+        res.redirect("/login"); // to the main page??
+      });
     } else {
       res.redirect("/register");
     }
@@ -94,22 +91,27 @@ module.exports = function(knex) {
 
   // List all the maps ListObj as the placehoder
   router.get("/maps", (req, res) => {
-    DataHelpers.getMapList((err,listObj){
-    res.json(listObj);
-    })
+    DataHelpers.getMapList((err, listObj) => {
+      res.json(listObj);
+    });
   });
 
   //create a new map, generate map_id for each map
-router.post("/maps", (req, res) => {
-  if (req.session.name) { //if login (set the session in register)
-    DataHelpers.createMapList(
-      req.body.mapName, req.body.description, req.session.user_id,//need a mapID?
-      function (err, response) {
-        if (err) throw err;
-        if (response) {
+  router.post("/maps", (req, res) => {
+    if (req.session.name) {
+      //if login (set the session in register)
+      DataHelpers.createMapList(
+        req.body.mapName,
+        req.body.description,
+        req.session.user_id, //need a mapID?
+        function (err, response) {
+          // if (err){console.log("error", err)}else
+          // if (response) {
           res.send(response);
-        }
-      });
+        })
+    } else {
+      console.log(req.session); // what is req.session
+      res.send("Only log-in users could create a new map");
     }
   });
 
@@ -120,16 +122,27 @@ router.post("/maps", (req, res) => {
     })
   });
 
-  //create a new place
+  //create a new place 
   router.post("/maps/:map_id/places", (req, res) => {
-    if (!req.params.map_id || !req.body.placeName || !req.body.latitude || !req.body.longitude) {
-      res.redirect('/');
-    } 
-      DataHelpers.createPlace(req.body.placeName, req.body.description,
-        req.body.latitude, req.body.longitude, req.params.map_id, function (err, response) {
-          if (err) throw err;
-          res.send(response); 
-			})
+    if (
+      !req.params.map_id ||
+      !req.body.placeName ||
+      !req.body.latitude ||
+      !req.body.longitude
+    ) {
+      res.redirect("/"); 
+    }
+    DataHelpers.createPlace(
+      req.body.placeName,
+      req.body.description,
+      req.body.latitude,
+      req.body.longitude,
+      req.params.map_id,
+      function(err, response) {
+        if (err) throw err;
+        res.send("a new place has been added");
+      }
+    );
   });
 
   router.get("/maps/:map_id/places/:place_id/images", (req, res) => {
@@ -139,7 +152,7 @@ router.post("/maps", (req, res) => {
   });
 
   // edit the images for the place
-  router.post("/maps/:map_id/places/:place_id/images", (req, res) => {});
+  // router.post("/maps/:map_id/places/:place_id/images", (req, res) => {});
 
   return router;
 };

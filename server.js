@@ -4,6 +4,7 @@ require("dotenv").config();
 
 const PORT = process.env.PORT || 8080;
 const ENV = process.env.ENV || "development";
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const sass = require("node-sass-middleware");
@@ -14,8 +15,8 @@ var methodOverride = require("method-override");
 
 const knexConfig = require("./knexfile");
 const knex = require("knex")(knexConfig[ENV]);
-const morgan = require("morgan");
-const knexLogger = require("knex-logger");
+const morgan = require("morgan"); //what is this?
+const knexLogger = require("knex-logger"); //what is this?
 
 // Seperated Routes for each Resource
 const usersRoutes = require("./routes/users");
@@ -29,12 +30,11 @@ app.use(morgan("dev"));
 app.use(knexLogger(knex));
 
 app.use(methodOverride("_method"));
-app.use(bodyParser.json()); //?
-app.use(bodyParser.urlencoded({ extended: false })); //true or false?
+// app.use(bodyParser.json()); //
 app.use(
   cookieSession({
     name: "wikiMapSession",
-    keys: ["wikiMap321"],
+    keys: ["wikiMap321"], //how to set this
     maxAge: 24 * 60 * 60 * 1000 * 30
   })
 );
@@ -50,16 +50,20 @@ app.use(
     outputStyle: "expanded"
   })
 );
+
 app.use(express.static("public"));
 
 // Mount all resource routes
-app.use("/api/users", usersRoutes(knex));
-
-app.use("/users", usersRoutes);
+// app.use("/api/users", usersRoutes(knex));
+app.use("/users", usersRoutes()); //need to pass a varible into the funtion
 
 // Home page
 app.get("/", (req, res) => {
   res.render("index");
+});
+
+app.post("wat", (req, res) => {
+  console.log("BODY", req.body);
 });
 
 app.listen(PORT, () => {
