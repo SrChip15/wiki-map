@@ -13,14 +13,22 @@ const bcrypt = require("bcryptjs");
 const cookieSession = require("cookie-session");
 var methodOverride = require("method-override");
 
+
 const knexConfig = require("./knexfile");
 const knex = require("knex")(knexConfig[ENV]);
 const morgan = require("morgan"); //what is this?
 const knexLogger = require("knex-logger"); //what is this?
 
 // Seperated Routes for each Resource
+<<<<<<< HEAD
 const indexRoutes = require("./routes/index.js");
 const usersRoutes = require("./routes/users.js");
+=======
+const usersRoutes = require("./routes/users");
+const placeRoutes = require("./routes/places");
+const mapRoutes = require("./routes/places");
+
+>>>>>>> 1be49c0b0afb9e239f86a4289f5e4f7517c599c7
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
 //         The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
@@ -53,18 +61,28 @@ app.use(
 
 app.use(express.static("public"));
 
+// pass the knex db connection object to data helpers to perform DB ops
+const dataHelpers = require("./db/data-helpers-places.js")(knex);
+const dataHelpersMaps = require("./db/data-helpers-maps.js")(knex);
+const dataHelpersUsers = require("./db/data-helpers-users.js")(knex);
+
 // Mount all resource routes
+<<<<<<< HEAD
 app.use("/", indexRoutes(knex));
 app.use("/users", usersRoutes); //need to pass a varible into the funtion
 app.use("/", index(knex));
 app.use("/users", users);
+=======
+
+app.use("/api/users", usersRoutes(knex));
+app.use("/api/map/:mapId/places", placeRoutes(dataHelpers));
+
+app.use("/users", usersRoutes);
+
+>>>>>>> 1be49c0b0afb9e239f86a4289f5e4f7517c599c7
 // Home page
 app.get("/", (req, res) => {
   res.render("index");
-});
-
-app.post("wat", (req, res) => {
-  console.log("BODY", req.body);
 });
 
 app.listen(PORT, () => {
