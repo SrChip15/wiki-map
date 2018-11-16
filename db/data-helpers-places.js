@@ -10,6 +10,8 @@ module.exports = function makeDataHelpers(knex) {
       description,
       placeLat,
       placeLong,
+      category,
+      placeURL,
       mapId
     ) {
       knex("places")
@@ -19,13 +21,10 @@ module.exports = function makeDataHelpers(knex) {
           image: imageURL,
           description: description,
           place_lat: placeLat,
-          place_long: placeLong
-        })
-        .then(id => {
-          return knex("map_places").insert({
-            map_id: mapId,
-            place_id: id
-          });
+          place_long: placeLong,
+          category: category,
+          place_url: placeURL,
+          map_id: mapId
         });
     },
 
@@ -36,7 +35,15 @@ module.exports = function makeDataHelpers(knex) {
       // meaning, pass received values (tagged by form approp) in the right order
       // as below and for unreceived values either pass a falsey value or even better
       // just pass false
-      const [name, imageURL, description, placeLat, placeLong] = args;
+      const [
+        name,
+        imageURL,
+        description,
+        placeLat,
+        placeLong,
+        category,
+        placeURL
+      ] = args;
 
       const payload = {};
       if (name) {
@@ -44,7 +51,7 @@ module.exports = function makeDataHelpers(knex) {
       }
 
       if (imageURL) {
-        payload.image = imageURL;
+        payload.image_url = imageURL;
       }
 
       if (description) {
@@ -59,6 +66,13 @@ module.exports = function makeDataHelpers(knex) {
         payload.place_long = placeLong;
       }
 
+      if (category) {
+        payload.category = category;
+      }
+
+      if (placeURL) {
+        payload.place_url = placeURL;
+      }
       // now payload is packed with the updated column info and ready for update
       knex("places")
         .where("placeId")
@@ -67,14 +81,9 @@ module.exports = function makeDataHelpers(knex) {
 
     // Delete place
     deletePlace: function(placeId) {
-      knex("map_places")
-        .where({ place_id: placeId })
-        .del()
-        .then(() => {
-          knex("places")
-            .where({ id: placeId })
-            .del();
-        });
+      knex("places")
+        .where({ id: placeId })
+        .del();
     },
 
     // Find place by place_id
@@ -95,8 +104,8 @@ module.exports = function makeDataHelpers(knex) {
       return knex
         .select("*")
         .from("places")
-        .rightJoin("map_places", "places.id", "map_places.place_id")
-        .where("map_places.map_id", mapId)
+        .rightJoin("maps", "places.map_id", "maps.id")
+        .where("maps.id", mapId)
         .then(rows => {
           callback(rows);
         })
