@@ -1,72 +1,69 @@
 const args = process.argv.slice(2);
-// const settings = require("../.env"); // settings.json
+const settings = require("../.env"); // settings.json
+const bcrypt = req
+
 const knex = require("knex")({
-  client: 'postgresql',
+  client: "postgresql",
   connection: {
-    host     : 'localhost',
-    user     : 'labber',
-    password : 'labber',
-    database : 'midterm',
-    port     : 5432,
+    host: "localhost",
+    user: "labber",
+    password: "labber",
+    database: "midterm",
+    port: 5432
   }
 });
 
 module.exports = function makeDataHelpers(db) {
   return {
-
 // Create User
-  createUser: (email, password, callback) => {
-    return knex('users').insert({'email': email, 'password': password})
-    .asCallback((err, res) => {
-      if (err) {
-        callback(err);
-        process.exit(0);
-      } else {
-        callback(null, res);
-        process.exit(0);
-      }
-    });
-  },
+    createUser: function (email, password) {
+      return knex('users')
+      .insert({ email: email, password: bcrypt.hashSync(password, 10)})
+      .into('users')
+},
+//DataHelpers.loginUser;
+//
 
 // Find user
-  userEmailPasswordById: (userid, callback) => {
-    const useridInt = parseInt(userid);
-    return knex.select('email', 'password').from('users')
-    .where('id', useridInt)
+const userEmailPasswordById = userid => {
+  const useridInt = parseInt(userid);
+  return knex
+    .select("email", "password")
+    .from("users")
+    .where("id", useridInt)
     .asCallback(function(err, rows) {
-    if (err) {
-        callback(err);
-        process.exit(0);
-      } else {
-        callback(null, res);
-        process.exit(0);
-      }
+      if (err) return console.error(err);
+      printResult(rows);
+      process.exit(0);
     });
-  },
+},
+// userEmailPasswordById(args);
 
-  // userEmailPasswordById(args, (person) => {
-  //   console.log('this is', person);
-  // });
+//         by email and password
+const useridByEmailPassword = (email, password) => {
+  const emailStr = email.toString();
+  console.log(password);
+  const passwordStr = password.toString();
+  console.log(emailStr, passwordStr);
+  return knex
+    .select("id")
+    .from("users")
+    .where("email", emailStr)
+    .andWhere("password", passwordStr)
+    .from("users")
+    .asCallback(function(err, rows) {
+      if (err) return console.error(err);
+      printResult(rows);
+      process.exit(0);
+    });
+};
 
-    //         by email and password
-  // const useridByEmailPassword = (email, password, callback) => {
-  //   const emailStr = email.toString();
-  //   console.log(password)
-  //   const passwordStr = password.toString();
-  //   return knex.select('id').from('users')
-  //   .where('email', emailStr).andWhere('password', passwordStr).from('users')
-  //   .asCallback(function(err, rows) {
-  //     if (err) callback(err);
-  //     callback(rows);
-  //     process.exit(0);
-  //   });
-  // }
+// useridByEmailPassword(args[0], args[1]);
 
-  // useridByEmailPassword(args[0], args[1], (test) => {
-  //   console.log(test);
-  // });
-
-
-
+const printResult = enter => {
+  enter.forEach(element => {
+    console.log(element);
+  });
+};
 
 // };
