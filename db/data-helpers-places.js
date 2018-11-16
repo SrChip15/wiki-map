@@ -1,23 +1,35 @@
-const args = process.argv.slice(2);
-
-
+/**
+ * Places endpoint database ops
+ */
 module.exports = function makeDataHelpers(knex) {
   return {
-
     // Create place
-    createPlace: function (name, imageURL, description, placeLat, placeLong) {
-      knex('places')
+    createPlace: function(
+      name,
+      imageURL,
+      description,
+      placeLat,
+      placeLong,
+      category,
+      placeURL,
+      mapId
+    ) {
+      knex("places")
+        .returning("id")
         .insert({
           name: name,
           image: imageURL,
           description: description,
           place_lat: placeLat,
           place_long: placeLong,
-        })
+          category: category,
+          place_url: placeURL,
+          map_id: mapId
+        });
     },
 
     // Modify place
-    editPlace: function (placeId, ...args) {
+    editPlace: function(placeId, ...args) {
       // Var args to offer users flexibility
       // However, at the insertion site, order priority must be maintained,
       // meaning, pass received values (tagged by form approp) in the right order
@@ -28,7 +40,9 @@ module.exports = function makeDataHelpers(knex) {
         imageURL,
         description,
         placeLat,
-        placeLong
+        placeLong,
+        category,
+        placeURL
       ] = args;
 
       const payload = {};
@@ -37,7 +51,7 @@ module.exports = function makeDataHelpers(knex) {
       }
 
       if (imageURL) {
-        payload.image = imageURL;
+        payload.image_url = imageURL;
       }
 
       if (description) {
@@ -52,48 +66,63 @@ module.exports = function makeDataHelpers(knex) {
         payload.place_long = placeLong;
       }
 
+      if (category) {
+        payload.category = category;
+      }
+
+      if (placeURL) {
+        payload.place_url = placeURL;
+      }
       // now payload is packed with the updated column info and ready for update
-      knex('users')
-        .where('id')
+      knex("places")
+        .where("placeId")
         .update(payload);
     },
 
     // Delete place
-    deletePlace: function (placeId) {
-      knex('places')
-      .where({id: placeId})
-      .del();
+    deletePlace: function(placeId) {
+      knex("places")
+        .where({ id: placeId })
+        .del();
     },
 
-    // Find place
-    //          by map_id
-    //          by place_id
-    //          by category
-    findPlaceById: function (placeId) {
-      knex('places')
-      .where({id: placeId})
-      .then(rows => {
-        return rows;
-      })
+    // Find place by place_id
+    findPlaceById: function(placeId, callback) {
+      return knex
+        .select("*")
+        .from("places")
+        .where("id", placeId)
+        .then(rows => {
+          callback(rows);
+        });
     },
 
-    findPlaceByMapId: function (mapId) {
-      // get place id from map id using join
-      // since places have a one-to-many relationship with maps,
-      // return all matching rows
-      knex('places')
-      .join('map_places', { map_id: mapId })
-      .then(rows => {
-        return rows;
-      })
+    // Find place by map_id
+    // since places have a one-to-many relationship with maps,
+    // return all matching rows
+    findPlaceByMapId: function(mapId, callback) {
+      return knex
+        .select("*")
+        .from("places")
+        .rightJoin("maps", "places.map_id", "maps.id")
+        .where("maps.id", mapId)
+        .then(rows => {
+          callback(rows);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
 
-    findPlaceByCategory: function (category) {
-      knex('places')
-      .where({category: category})
-      .then (rows => {
-        return rows;
-      })
-    },
+    // Find place by category
+    findPlaceByCategory: function(category, callback) {
+      return knex
+        .select("*")
+        .from("places")
+        .where("category", category)
+        .then(rows => {
+          callback(rows);
+        });
+    }
   };
-}
+};
