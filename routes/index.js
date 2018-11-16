@@ -18,7 +18,7 @@ router.get("/users", (req, res) => {
         const templateVars = {
           user: req.body.user_id,
           favorites:,
-          contributions:,
+        0p   contributions:,
           makers:
         };
       res.json(results); //???
@@ -27,13 +27,28 @@ router.get("/users", (req, res) => {
   });
 */
 
+
+/*
+render ejs:
+. index.ejs //map's operation
+. login.ejs
+. logout.ejs
+. register.ejs
+
+*/
+
 //export a function
 module.exports = function(knex) {
   const dataHelpers = require('../lib/Datahelpers')(knex);
 
   router.get("/", (req, res) => {
     if (req.session) {
-      res.render("index", { name: req.session.name });
+      const templateVars = {
+        // maps: ,
+        // places: 
+        user: req.session.user_id
+      };
+      res.render("index", templateVars);
     } else {
       res.render("index");
     }

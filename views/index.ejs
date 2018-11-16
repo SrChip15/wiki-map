@@ -9,9 +9,67 @@
 
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="/scripts/app.js"></script>
+    <script t
   </head>
 
   <body>
     <h1>Hello World!</h1>
+
+    <p>there should be a preloaded map</p>
+
+    <form id="select-map" action="/" method="GET">
+      <select id="selectCategories" name="categories">
+        <option value="0">Select a category </option>
+        <p>Food&Drink</p>
+        <p>Entertainment</p>
+        <p>Public servic</p>
+      </select>
+      <input type="submit" value="Submit" />
+    </form>
+
+    <form id="new-map" action="/" method="GET">
+      <select id="selectCategories" name="categories">
+        <option value="0">Select a category </option>
+        <p>Food&Drink</p>
+        <p>Entertainment</p>
+        <p>Public servic</p>
+      </select>
+      <input type="submit" value="Submit" />
+    </form>
+
+    <!-- if login, allow to add new category -->
+    <% if(user) {%>
+    <form id="new-category" action="/categories" method="POST">
+      <input
+        id="categories"
+        type="text"
+        name="categories"
+        placeholder=" Enter new category"
+      />
+      <input type="submit" value="CREATE" name="create" id="create-category" />
+    </form>
+
+    <!-- if login, allow to fovorite a place -->
+    <%}%> <%if(user){%>
+    <form id="favourites" action="/favourites" method="POST">
+      <input
+        name="favourite"
+        id="favourite"
+        type="hidden"
+        value="<%=category%>"
+      />
+      <button id="favourite" type="submit">ADD TO FAVOURITES</button>
+    </form>
+    <%}%>
+
+    <div id="favorites"></div>
+    <div id="contributions"></div>
+
+    <script>
+      map_leaflet;
+    </script>
+    <script>
+      create_a_maker;
+    </script>
   </body>
 </html>
