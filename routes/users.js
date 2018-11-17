@@ -10,7 +10,7 @@ Remove/Destroy: DELETE /photos/:id
 */
 const express = require("express");
 const router = express.Router();
-const DataHelpers = require("...DataHelpers");
+// const DataHelpers = require("../db/ataHelpers");
 module.exports = function(knex) {
   // render templateVars
 
@@ -22,7 +22,7 @@ module.exports = function(knex) {
       res.render('index');
     }
   })
-  
+
   router.get("/users", (req, res) => {
     // const user = knex('users').select(*).where('id', req.session.user_id);
     // const favoritesList = knex(); // connect to the favorite
@@ -75,15 +75,15 @@ module.exports = function(knex) {
 
   // insert the input info into database
   router.post("/register", (req, res) => {
-    if ((req.body.email && req.body.name) {
+    if (req.body.email && req.body.name) {
       DataHelpers.createUser(
         req.body.email,
         req.body.password,
-        (err, xxx) => { 
+        (err, xxx) => {
           if (err) throw err;
           req.body.user_id = arrIds[0]; //user the seesion later
           req.body.email;
-          req.body.password = ;
+          req.body.password = test;
           res.redirect("/login"); // to the main page??
         }
       );
@@ -94,7 +94,7 @@ module.exports = function(knex) {
 
   // List all the maps ListObj as the placehoder
   router.get("/maps", (req, res) => {
-    DataHelpers.getMapList((err,listObj){
+    DataHelpers.getMapList((err,listObj) => {
     res.json(listObj);
     })
   });
@@ -115,7 +115,7 @@ router.post("/maps", (req, res) => {
 
   //list all the places on a single map
   router.get("/maps/:map_id/places", (req, res) => {
-    DataHelpers.getPlacesByMapId(req.params.map_id(err, places)=> {
+    DataHelpers.getPlacesByMapId(req.params.map_id, (err, places)=> {
       res.send(places);
     })
   });
@@ -124,11 +124,11 @@ router.post("/maps", (req, res) => {
   router.post("/maps/:map_id/places", (req, res) => {
     if (!req.params.map_id || !req.body.placeName || !req.body.latitude || !req.body.longitude) {
       res.redirect('/');
-    } 
+    }
       DataHelpers.createPlace(req.body.placeName, req.body.description,
         req.body.latitude, req.body.longitude, req.params.map_id, function (err, response) {
           if (err) throw err;
-          res.send(response); 
+          res.send(response);
 			})
   });
 
