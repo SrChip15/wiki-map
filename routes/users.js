@@ -1,27 +1,26 @@
 "use strict";
+
 /*
 Browse/List/Index: GET /photos
 Create/Add: POST /photos
 Read/Show: GET /photos/:id
 Update/Edit: PUT /photos/:id
 Remove/Destroy: DELETE /photos/:id
-
-
 */
+
 const express = require("express");
 const router = express.Router();
-// const DataHelpers = require("../db/ataHelpers");
-module.exports = function(knex) {
-  // render templateVars
 
-
+module.exports = function (DataHelpers) {
   router.get('/', (req, res) => {
     if (req.session) {
-      res.render('index', { name: req.session.name });
+      res.render('index', {
+        name: req.session.name
+      });
     } else {
       res.render('index');
     }
-  })
+  });
 
   router.get("/users", (req, res) => {
     // const user = knex('users').select(*).where('id', req.session.user_id);
@@ -46,9 +45,11 @@ module.exports = function(knex) {
   router.get("/login", (req, res) => {
     res.send("this is the login page");
   });
+
+  // PUT perhaps
   router.post("/login", (req, res) => {
     if (req.body.username && req.body.password) {
-      DataHelpers.loginUser(req.body.username, req.body.password, function(
+      DataHelpers.loginUser(req.body.username, req.body.password, function (
         err,
         userObj
       ) {
@@ -62,12 +63,15 @@ module.exports = function(knex) {
       });
     }
   });
+
+  // DELETE perhaps
   router.post("/logout", (req, res) => {
     //clear the cookie session
     // or delete the cookieSession;
     res.redirect("/");
   });
 
+  // POST definitely
   router.get("/register", (req, res) => {
     res.render("register");
     // res.render('register');
@@ -94,28 +98,28 @@ module.exports = function(knex) {
 
   // List all the maps ListObj as the placehoder
   router.get("/maps", (req, res) => {
-    DataHelpers.getMapList((err,listObj) => {
-    res.json(listObj);
+    DataHelpers.getMapList((err, listObj) => {
+      res.json(listObj);
     })
   });
 
   //create a new map, generate map_id for each map
-router.post("/maps", (req, res) => {
-  if (req.session.name) { //if login (set the session in register)
-    DataHelpers.createMapList(
-      req.body.mapName, req.body.description, req.session.user_id,//need a mapID?
-      function (err, response) {
-        if (err) throw err;
-        if (response) {
-          res.send(response);
-        }
-      });
+  router.post("/maps", (req, res) => {
+    if (req.session.name) { //if login (set the session in register)
+      DataHelpers.createMapList(
+        req.body.mapName, req.body.description, req.session.user_id, //need a mapID?
+        function (err, response) {
+          if (err) throw err;
+          if (response) {
+            res.send(response);
+          }
+        });
     }
   });
 
   //list all the places on a single map
   router.get("/maps/:map_id/places", (req, res) => {
-    DataHelpers.getPlacesByMapId(req.params.map_id, (err, places)=> {
+    DataHelpers.getPlacesByMapId(req.params.map_id, (err, places) => {
       res.send(places);
     })
   });
@@ -125,11 +129,12 @@ router.post("/maps", (req, res) => {
     if (!req.params.map_id || !req.body.placeName || !req.body.latitude || !req.body.longitude) {
       res.redirect('/');
     }
-      DataHelpers.createPlace(req.body.placeName, req.body.description,
-        req.body.latitude, req.body.longitude, req.params.map_id, function (err, response) {
-          if (err) throw err;
-          res.send(response);
-			})
+    DataHelpers.createPlace(req.body.placeName, req.body.description,
+      req.body.latitude, req.body.longitude, req.params.map_id,
+      function (err, response) {
+        if (err) throw err;
+        res.send(response);
+      })
   });
 
   router.get("/maps/:map_id/places/:place_id/images", (req, res) => {
