@@ -13,16 +13,16 @@ const bcrypt = require("bcryptjs");
 const cookieSession = require("cookie-session");
 var methodOverride = require("method-override");
 
+
 const knexConfig = require("./knexfile");
 const knex = require("knex")(knexConfig[ENV]);
 const morgan = require("morgan"); //what is this?
 const knexLogger = require("knex-logger"); //what is this?
 
 // Seperated Routes for each Resource
-
-const indexRoutes = require("./routes/index.js");
+const indexRoutes = require("./routes/index");
 const placeRoutes = require("./routes/places");
-const mapRoutes = require("./routes/places");
+const mapRoutes = require("./routes/maps");
 const registerRoutes = require("./routes/register");
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
@@ -58,22 +58,26 @@ app.use(
 app.use(express.static("public"));
 
 // pass the knex db connection object to data helpers to perform DB ops
+const dataHelpers = require("./db/data-helpers-places.js")(knex);
 const dataHelpersMaps = require("./db/data-helpers-maps.js")(knex);
 const dataHelpersUsers = require("./db/data-helpers-users.js")(knex);
-const dataHelpersPlaces = require("./db/data-helpers-places.js")(knex);
 
-app.use("/maps", mapRoutes(dataHelpersMaps));
-app.use("/users", indexRoutes(dataHelpersUsers));
-app.use("/maps/:mapId/places", placeRoutes(dataHelpersPlaces));
-app.use("/register", registerRoutes(dataHelpersUsers));
 // Mount all resource routes
+
+app.use("/api/users", indexRoutes(knex));
+app.use("/api/map/:mapId/places", placeRoutes(dataHelpers));
+app.use("/maps", mapRoutes(dataHelpersMaps));
+app.use("/register", registerRoutes(dataHelpersUsers));
+
+// app.use("/users", usersRoutes);
 
 // Home page
 app.get("/", (req, res) => {
-  const templateVars = {
-    user: null
-  };
-  res.render("index", templateVars);
+  res.render("index");
+});
+
+app.post("wat", (req, res) => {
+  console.log("BODY", req.body);
 });
 
 app.listen(PORT, () => {

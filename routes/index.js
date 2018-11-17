@@ -3,7 +3,7 @@
 const express = require("express");
 const router = express.Router();
 // const DataHelpers = require("...DataHelpers");
-const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcryptjs");
 
 /* example by default
 router.get("/users", (req, res) => {
@@ -37,7 +37,7 @@ render ejs:
 
 //export a function
 module.exports = function(dataHelpers) {
-` `  router.get("/", (req, res) => {
+   router.get("/", (req, res) => {
     if (req.session) {
       const templateVars = {
         user: req.session.user_id
