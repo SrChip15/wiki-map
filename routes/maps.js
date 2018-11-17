@@ -5,24 +5,14 @@ const router = express.Router({
 
 module.exports = function(mapFunctions) {
 
-  router.get('/:mapurl', function (res, req) {
-    mapFunctions.findMapByUrl(req.body.mapurl, (err, result) => {
-      if (err) {
-        res.send('something failed');
-      } else {
-        res.json(result);
-      }
-    })
-  })
 
-  router.delete('/:mapurl', function (req, res) {
-    mapFunctions.deleteMap(req.params.id, (err, result) => {
-      if (err) {
-        res.send('something failed');
-      } else {
+
+  router.post('/delete', function (req, res) {
+    mapFunctions.deleteMap(req.body.mapid)
+    .then((result) => {
+      console.log(res)
         // CHECK THIS ONE!
         res.redirect('localhost:8080/index')
-      }
     })
   })
 
@@ -53,6 +43,8 @@ module.exports = function(mapFunctions) {
   router.get('/contributions', function (req, res)  {
     mapFunctions.findMapByContribution(req.body.userid, (err, result) => {
       if (err) {
+        console.log(req)
+        console.log(res)
         res.send('something failed');
       } else {
         res.json(result)
@@ -60,6 +52,17 @@ module.exports = function(mapFunctions) {
     })
   })
 
+  router.get('/:mapurl', function (res, req) {
+    mapFunctions.findMapByUrl(req.params.mapurl, (err, result) => {
+      if (err) {
+        res.send('something failed');
+      } else {
+        res.json(result);
+      }
+    })
+  })
+
+return router
 };
 
 

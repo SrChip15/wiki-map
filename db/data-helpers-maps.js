@@ -37,8 +37,8 @@ module.exports = function makeMapDataHelpers(knex) {
         } else {
           callback(null, randomNum);
         }
-      });
-    });
+      })
+    })
   },
 
 // Delete map
@@ -95,10 +95,9 @@ module.exports = function makeMapDataHelpers(knex) {
 
     //         by user favourites
   findMapByFavourites: (userid, callback) => {
-    const useridInt = parseInt(userid);
     return knex.select('map_id')
     .from('user_favourites')
-    .where('user_id', useridInt)
+    .where('user_id', userid)
     .asCallback((err, res) => {
       if (err) {
         callback(err);
@@ -110,10 +109,9 @@ module.exports = function makeMapDataHelpers(knex) {
 
     //         by user contributions
   findMapByContribution: (userid, callback) => {
-    const useridInt = parseInt(userid);
     return knex.select('map_id')
     .from('user_contributions')
-    .where('user_id', useridInt)
+    .where('user_id', userid)
     .asCallback((err, res) => {
       if (err) {
         callback(err);
@@ -121,5 +119,6 @@ module.exports = function makeMapDataHelpers(knex) {
         callback(null, res);
       }
     });
+  }
   }
 };
