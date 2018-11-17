@@ -18,7 +18,7 @@ const generateRandomString = () => {
 module.exports = function makeMapDataHelpers(knex) {
   return {
 
-// Create map
+// Create map and returns mapurl
   createMap: (name, description, userid, callback) => {
     const nameStr = name.toString();
     const descriptionStr = description.toString();
@@ -32,10 +32,8 @@ module.exports = function makeMapDataHelpers(knex) {
       .asCallback((err, res) => {
         if (err) {
           callback(err);
-          process.exit(0);
         } else {
-          callback(null, res);
-          process.exit(0);
+          callback(null, randomNum);
         }
       });
     });
@@ -67,7 +65,7 @@ module.exports = function makeMapDataHelpers(knex) {
   // deleteMap(args)
   //   .then((res) => {
   //     console.log('map is now gone', res)
-  //     process.exit(0);
+  //
   //   })
   //   .catch((err) => {
   //     console.error(err);
@@ -85,10 +83,8 @@ module.exports = function makeMapDataHelpers(knex) {
     .asCallback((err, res) => {
       if (err) {
         callback(err);
-        process.exit(0);
       } else {
         callback(null, res);
-        process.exit(0);
       }
     });
   },
@@ -102,10 +98,8 @@ module.exports = function makeMapDataHelpers(knex) {
     .asCallback((err, res) => {
       if (err) {
         callback(err);
-        process.exit(0);
       } else {
-      callback(null, res);
-      process.exit(0);
+        callback(null, res);
       }
     });
   },
@@ -119,13 +113,9 @@ module.exports = function makeMapDataHelpers(knex) {
     .asCallback((err, res) => {
       if (err) {
         callback(err);
-        process.exit(0);
       } else {
         callback(null, res);
-        process.exit(0);
       }
     });
   }
-
-
 };

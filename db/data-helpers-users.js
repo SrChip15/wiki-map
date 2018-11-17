@@ -15,17 +15,16 @@ const knex = require("knex")({
 module.exports = function makeUserDataHelpers(knex) {
   return {
 
-// Create User
+// Create User, returns newly created user ID on success
     createUser: (email, password, callback) => {
       return knex('users')
       .insert({'email': email, 'password': password})
+      .returning('id')
       .asCallback((err, res) => {
         if (err) {
           callback(err);
-          process.exit(0);
         } else {
           callback(null, res);
-          process.exit(0);
         }
       });
     },
@@ -39,10 +38,8 @@ module.exports = function makeUserDataHelpers(knex) {
       .asCallback((err, res) => {
         if (err) {
           callback(err);
-          process.exit(0);
         } else {
           callback(null, res);
-          process.exit(0);
         }
       });
     },
@@ -59,10 +56,8 @@ module.exports = function makeUserDataHelpers(knex) {
       .asCallback((err, res) => {
         if (err) {
           callback(err);
-          process.exit(0);
         } else {
           callback(null, res);
-          process.exit(0);
         }
       });
     }
