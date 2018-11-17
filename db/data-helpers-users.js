@@ -12,25 +12,49 @@ const knex = require("knex")({
   }
 });
 
+const bcrypt = require("bcryptjs");
+
 module.exports = function makeUserDataHelpers(knex) {
   return {
 
-// Create User
+// Create User & hash the password
+    //bcrypt.hashSync(password,10)}
     createUser: (email, password, callback) => {
       return knex('users')
-      .insert({'email': email, 'password': password})
+        .insert({ 'email': email, 'password': password }) 
       .asCallback((err, res) => {
         if (err) {
           callback(err);
-          process.exit(0);
+          // process.exit(0); //quit the service
         } else {
           callback(null, res);
-          process.exit(0);
+          // process.exit(0);
         }
       });
     },
 
+
+    //login the user
+    loginUser: (email,password,callback)=> {
+			knex('users').where('email',email).select(['id','name','password'])
+				.asCallback(function(err,res) { 
+					if (!res) {
+						callback(err);
+					} else if (!bcrypt.compareSync(password,res[0].password)) {
+						callback(err);
+					}
+					else if (bcrypt.compareSync(password,res[0].password)){ 
+						console.log(res[0].id);
+						callback(err,{
+							 id: res[0].id,
+							 name: res[0].name,
+							 email: res[0].email
+						}); }
+			})
+		},
+
 // Find user by email and password
+    //how to match the 
     userEmailPasswordById: (userid) => {
       const useridInt = parseInt(userid);
       return knex.select("email", "password")
@@ -39,16 +63,16 @@ module.exports = function makeUserDataHelpers(knex) {
       .asCallback((err, res) => {
         if (err) {
           callback(err);
-          process.exit(0);
+          // process.exit(0);
         } else {
           callback(null, res);
-          process.exit(0);
+          // process.exit(0);
         }
       });
     },
 
 
-//user Id by email and password
+//find user Id by email and password
     userIdByEmailPassword: (email, password, callback) => {
       const emailStr = email.toString();
       const passwordStr = password.toString();
@@ -59,10 +83,10 @@ module.exports = function makeUserDataHelpers(knex) {
       .asCallback((err, res) => {
         if (err) {
           callback(err);
-          process.exit(0);
+          // process.exit(0);
         } else {
           callback(null, res);
-          process.exit(0);
+          // process.exit(0);
         }
       });
     }

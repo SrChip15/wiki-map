@@ -39,14 +39,12 @@ render ejs:
 
 //export a function
 module.exports = function(knex) {
-  const dataHelpers = require('../lib/Datahelpers')(knex);
+  const dataHelpers = require('../db/data-helpers-users.js')(knex);
 
   router.get("/", (req, res) => {
     if (req.session) {
       const templateVars = {
-        // maps: ,
-        // places: 
-        user: req.session.user_id
+      user: req.session.user_id
       };
       res.render("index", templateVars);
     } else {
@@ -61,22 +59,20 @@ module.exports = function(knex) {
   });
 
   router.post("/login", (req, res) => {
-    console.log("WAT", req.body);
     if (req.body.username && req.body.password) {
       DataHelpers.loginUser(req.body.username, req.body.password, function (err, userObj) {
         if (err) console.log("error", err); // how to use the throw error
-        if (userObj) {
-          req.session.user_id = userObj.id;
-          req.session.email = userObj.email;
+        if (users) {
+          req.session.user_id = users.id;
+          req.session.email = users.email;
+          req.session.password = users.password;
           // req.session.name = userObj.name;
           res.redirect("/");
         } else {
           res.redirect("/login");
         }
       });
-      res.send("LOGGED IN");
     }
-    console.log("HELLO");
   });
 
   router.post("/logout", (req, res) => {
@@ -92,11 +88,11 @@ module.exports = function(knex) {
   // insert the input info into database! have not done yet
   router.post("/register", (req, res) => {
     if (req.body.email && req.body.name) {
-      DataHelpers.createUser(req.body.email, req.body.password, (err, xxx) => {
+      DataHelpers.createUser(req.body.email, req.body.password, (err, res) => {
         if (err) throw err;
-        req.body.user_id = arrIds[0]; //user the seesion later
-        req.body.email;
-        req.body.password;
+        req.body.user_id = users[0]; //user the seesion later
+        req.session.email= req.body.email;
+        req.session.pasword= req.body.password;
         res.redirect("/login"); // to the main page??
       });
     } else {
