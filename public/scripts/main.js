@@ -1,8 +1,10 @@
+// require("dotenv").config();
+const TOKEN = 'sk.eyJ1Ijoic3JpLWRldiIsImEiOiJjam9obnhnYW4wMDl3M3Zucjh1NDJxbGZoIn0.WcfmfgzddXP4D-_JAAcAKQ';
+
 // initialize the map and set its view to our chosen geographical coordinates and a zoom level
 const eglinton = [43.699209, -79.435819];
 const eastYork = [43.6912, -79.341667];
 const bounds = L.latLngBounds(eglinton, eastYork);
-const token = process.env.MAPBOX_ACCESS_TOKEN;
 
 const mymap = L.map("mapid", {
   center: [43.6383, -79.4301],
@@ -18,7 +20,7 @@ L.tileLayer(
       'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 20,
     id: "mapbox.streets",
-    accessToken: token
+    accessToken: TOKEN,
   }
 ).addTo(mymap);
 
