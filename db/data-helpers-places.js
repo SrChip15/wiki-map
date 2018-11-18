@@ -13,6 +13,7 @@ module.exports = function makeDataHelpers(knex) {
       category,
       placeURL,
       mapId,
+      userId,
       callback
     ) {
       return knex("places")
@@ -28,12 +29,17 @@ module.exports = function makeDataHelpers(knex) {
           map_id: mapId
         })
         .then(id => {
+          knex('user_contributions')
+          .insert({
+            user_id: userId,
+            map_id: mapId
+          });
           callback(id);
         });
     },
 
     // Modify place
-    editPlace: function(placeId, name, callback) {
+    editPlace: function(placeId, name, userId, callback) {
       // The below method signature and code could be repurposed for use
       // after building out the MVP
 
