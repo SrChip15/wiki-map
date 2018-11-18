@@ -19,6 +19,7 @@ module.exports = function(mapFunctions) {
     })
   })
 
+// tabkes cookie as userid and uses it to grab favourites
   router.get('/favourites', (req, res) => {
     mapFunctions.findMapByFavourites(req.session.userid, (err, result) => {
       if (err) {
@@ -29,6 +30,7 @@ module.exports = function(mapFunctions) {
     })
   })
 
+// takes cookie as userid and uses it to grab contribution
   router.get('/contributions', (req, res) => {
     mapFunctions.findMapByContribution(req.session.userid, (err, result) => {
       if (err) {
@@ -55,7 +57,7 @@ module.exports = function(mapFunctions) {
     .then((result) => {
       console.log(res)
         // CHECK THIS ONE!
-        res.redirect('/index')
+        res.redirect('/')
     })
   })
 
