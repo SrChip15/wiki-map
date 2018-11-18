@@ -19,21 +19,7 @@ $(() => {
       },
     })
 
-    // set centre view
-    const mapUI = L.map("mapid", {
-      center: [43.6426, -79.3871],
-      zoom: 15
-    });
-
-    // add a tile layer to add to our map
-    L.tileLayer(
-      "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-        attribution: ATTRIBUTION,
-        maxZoom: 20,
-        id: "mapbox.streets",
-        accessToken: TOKEN,
-      }
-    ).addTo(mapUI);
+    let mapUI = createNewMap();
 
     // Create markers for the 1st place in the list as default
     for (place of places) {
@@ -46,7 +32,8 @@ $(() => {
       $.ajax(`/maps/${mapId}`, {
         method: "GET",
         success: function (places) {
-          console.log(places);
+          mapUI.remove();
+          mapUI = createNewMap();
           for (const place of places) {
             createMarker(mapUI, place);
           }
@@ -54,13 +41,34 @@ $(() => {
       })
     });
 
+    function createNewMap() {
+      let mapUI = L.map("mapid", {
+        center: [43.6426, -79.3871],
+        zoom: 15,
+      });
+
+      // add a tile layer to add to our map
+      L.tileLayer(
+        "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+          attribution: ATTRIBUTION,
+          maxZoom: 20,
+          id: "mapbox.streets",
+          accessToken: TOKEN,
+        }
+      ).addTo(mapUI);
+
+      return mapUI;
+    }
+
     function createMapList(mapList) {
       $('#map-list ul li').remove();
       for (const map of mapList) {
         const $listItem = $('<li>')
-        .addClass('spaced-list')
-        .append(`<a href="#">${map.name}</a>`)
-        .data({mapId: map.id});
+          .addClass('spaced-list')
+          .append(`<a href="#">${map.name}</a>`)
+          .data({
+            mapId: map.id
+          });
         $('#map-list ul').append($listItem);
         // $('#map-list ul').append(`<li class="spaced-list"><a href="#">${map.name}</a></li>`);
       }
