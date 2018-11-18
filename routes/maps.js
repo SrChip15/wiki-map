@@ -3,62 +3,61 @@ const router = express.Router();
 
 module.exports = function(mapFunctions) {
 
-  router.post('/delete', function (req, res) {
-    mapFunctions.deleteMap(req.body.mapid)
-    .then((result) => {
-      console.log(res)
-        // CHECK THIS ONE!
-        res.send('done!')
-    })
-  })
-
-  router.get('/', function (req, res) {
-    console.log(req.params)
+// this one brings up a test page
+  router.get('/', (req, res) => {
     res.render("tester")
-
   })
 
-  router.post('/', function (req, res)  {
+// creates a map and redirects to url once it's done
+  router.post('/', (req, res) => {
     mapFunctions.createMap(req.body.name, req.body.description, req.body.userid, (err, result) => {
       if (err) {
-        res.send('something failed');
+        console.log('error', err);
       } else {
-        res.json(result);
+        res.redirect(`/${result}`);
       }
     })
   })
 
-  router.post('/favourites', function (req, res)  {
-    console.log('request', req.body)
-    mapFunctions.findMapByFavourites(req.body.userid, (err, result) => {
+  router.get('/favourites', (req, res) => {
+    mapFunctions.findMapByFavourites(req.session.userid, (err, result) => {
       if (err) {
-        console.log('error', err)
-                res.send('something failed');
+        console.log('error', err);
       } else {
         res.json(result)
       }
     })
   })
 
-  router.post('/contributions', function (req, res)  {
-    mapFunctions.findMapByContribution(req.body.userid, (err, result) => {
+  router.get('/contributions', (req, res) => {
+    mapFunctions.findMapByContribution(req.session.userid, (err, result) => {
       if (err) {
-        res.send('something failed');
+        console.log('error', err);
       } else {
         res.json(result)
       }
     })
   })
 
-  router.get('/:mapUrl', function (req, res) {
+  router.get('/:mapUrl', (req, res) => {
     mapFunctions.findMapByUrl(req.params.mapUrl, (err, result) => {
       if (err) {
-        res.send('something failed');
+        console.log('error', err);
       } else {
         res.json(result);
       }
     });
   });
+
+  // deletes a map and redirects to hopefully the index
+  router.delete('/:mapurl', (req, res) => {
+    mapFunctions.deleteMap(req.body.mapid)
+    .then((result) => {
+      console.log(res)
+        // CHECK THIS ONE!
+        res.redirect('/index')
+    })
+  })
 
 return router;
 };
