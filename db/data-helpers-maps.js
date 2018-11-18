@@ -80,7 +80,6 @@ module.exports = function makeMapDataHelpers(knex) {
     // Find map
     //         by URL
   findMapByUrl: (url, callback) => {
-    const urlStr = url.toString();
     return knex.select('id')
     .from('maps')
     .where('url', urlStr)
