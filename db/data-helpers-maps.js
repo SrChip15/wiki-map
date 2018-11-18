@@ -1,6 +1,8 @@
 // short URL that is used while the map is shared
 const generateRandomString = () => {
-  let r = Math.random().toString(36).substring(7);
+  let r = Math.random()
+    .toString(36)
+    .substring(7);
   return r;
 };
 
@@ -31,8 +33,8 @@ module.exports = function makeMapDataHelpers(knex) {
               } else {
                 callback(null, randomNum);
               }
-            });
-        });
+            })
+        })
     },
 
     // Delete map
@@ -53,8 +55,25 @@ module.exports = function makeMapDataHelpers(knex) {
         })
         .then(() => {
           return knex('maps')
-            .where('id', mapIdInt)
-            .del();
+            .insert({
+              url: randomNum,
+              name: nameStr,
+              description: descriptionStr
+            })
+            .returning('id')
+            .then((id) => {
+              return knex('user_contributions').insert({
+                  user_id: userid,
+                  map_id: id[0]
+                })
+                .asCallback((err, res) => {
+                  if (err) {
+                    callback(err);
+                  } else {
+                    callback(null, randomNum);
+                  }
+                });
+            });
         });
     },
 
@@ -73,12 +92,25 @@ module.exports = function makeMapDataHelpers(knex) {
         });
     },
 
+    // Find map by URL
+    findMapByUrl: (url, callback) => {
+      return knex.select('id')
+        .from('maps')
+        .where('url', urlStr)
+        .asCallback((err, res) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null, res);
+          }
+        });
+    },
+
     // Find map by user favourites
     findMapByFavourites: (userid, callback) => {
-      const useridInt = parseInt(userid);
       return knex.select('map_id')
         .from('user_favourites')
-        .where('user_id', useridInt)
+        .where('user_id', userid)
         .asCallback((err, res) => {
           if (err) {
             callback(err);
@@ -90,10 +122,9 @@ module.exports = function makeMapDataHelpers(knex) {
 
     // Find map by user contributions
     findMapByContribution: (userid, callback) => {
-      const useridInt = parseInt(userid);
       return knex.select('map_id')
         .from('user_contributions')
-        .where('user_id', useridInt)
+        .where('user_id', userid)
         .asCallback((err, res) => {
           if (err) {
             callback(err);

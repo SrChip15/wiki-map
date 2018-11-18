@@ -33,11 +33,12 @@ module.exports = function makeUserDataHelpers(knex) {
         });
     },
 
-    //user Id by email and password
+    //find user Id by email and password
     userIdByEmailPassword: (email, password, callback) => {
       const emailStr = email.toString();
       const passwordStr = password.toString();
-      return knex.select('id').from('users')
+      return knex.select('id')
+        .from('users')
         .where('email', emailStr)
         .andWhere('password', passwordStr)
         .from('users')
@@ -50,4 +51,4 @@ module.exports = function makeUserDataHelpers(knex) {
         });
     }
   };
-}
+};
