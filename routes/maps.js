@@ -9,10 +9,15 @@ module.exports = function (mapFunctions) {
   })
 
   router.get('/all', (req, res) => {
-    // res.status(200).send("Now let's get all the maps");
     mapFunctions.getMaps((rows) => {
-      res.json(rows);
+      res.status(200).json(rows);
     });
+  })
+
+  router.get('/:mapId', (req, res) => {
+    mapFunctions.findMapById(req.params.mapId, rows => {
+      res.status(200).json(rows);
+    })
   })
 
   // creates a map and redirects to url once it's done

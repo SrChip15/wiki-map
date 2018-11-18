@@ -39,11 +39,21 @@ module.exports = function makeMapDataHelpers(knex) {
 
     getMaps: function (callback) {
       return knex
-      .select("*")
-      .from("maps")
-      .then((rows) => {
-        callback(rows);
-      });
+        .select("*")
+        .from("maps")
+        .then(rows => {
+          callback(rows);
+        });
+    },
+
+    findMapById: function (mapId, callback) {
+      return knex
+        .select("*")
+        .from("places")
+        .where("map_id", mapId)
+        .then(rows => {
+          callback(rows);
+        })
     },
 
     // Delete map

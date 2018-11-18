@@ -19,10 +19,50 @@ $(() => {
       },
     })
 
+    // set centre view
+    const mapUI = L.map("mapid", {
+      center: [43.6426, -79.3871],
+      zoom: 15
+    });
+
+    // add a tile layer to add to our map
+    L.tileLayer(
+      "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+        attribution: ATTRIBUTION,
+        maxZoom: 20,
+        id: "mapbox.streets",
+        accessToken: TOKEN,
+      }
+    ).addTo(mapUI);
+
+    // Create markers for the 1st place in the list as default
+    for (place of places) {
+      createMarker(mapUI, place);
+    }
+
+    $('#map-list ul').on("click", 'li', function () {
+      const mapId = $(this).data("mapId");
+      // alert("you clicked a map with map id = " + $(this).data("mapId"));
+      $.ajax(`/maps/${mapId}`, {
+        method: "GET",
+        success: function (places) {
+          console.log(places);
+          for (const place of places) {
+            createMarker(mapUI, place);
+          }
+        },
+      })
+    });
+
     function createMapList(mapList) {
       $('#map-list ul li').remove();
       for (const map of mapList) {
-        $('#map-list ul').append(`<li class="spaced-list"><a href="#">${map.name}</a></li>`);
+        const $listItem = $('<li>')
+        .addClass('spaced-list')
+        .append(`<a href="#">${map.name}</a>`)
+        .data({mapId: map.id});
+        $('#map-list ul').append($listItem);
+        // $('#map-list ul').append(`<li class="spaced-list"><a href="#">${map.name}</a></li>`);
       }
     }
 
@@ -40,33 +80,6 @@ $(() => {
 
       const desc = L.DomUtil.create('p', 'place-desc', div);
       desc.textContent = `${place.description}`;
-    }
-
-    // set centre view
-    const mapUI = L.map("mapid", {
-      center: [43.6426, -79.3871],
-      zoom: 15
-    });
-
-    // add a tile layer to add to our map
-    L.tileLayer(
-      "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-        attribution: ATTRIBUTION,
-        maxZoom: 20,
-        id: "mapbox.streets",
-        accessToken: TOKEN,
-      }
-    ).addTo(mapUI);
-
-    // add other things to your map, including markers, polylines, polygons, circles, and popups
-    // let marker = L.marker([43.6383, -79.4301]).addTo(mapUI).bindPopup('<p>Hello</p');
-    for (place of places) {
-      // console.log(place.place_lat, place.place_long);
-      createMarker(mapUI, place);
-      // const corr = -place.place_long;
-      // marker = new L.marker([place.place_lat, corr])
-      //   .bindPopup($(`<img src=${place.image_url} width="100" height="100">`))
-      //   .addTo(mapUI);
     }
   });;
 });
