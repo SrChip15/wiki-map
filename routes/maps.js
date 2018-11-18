@@ -8,6 +8,13 @@ module.exports = function (mapFunctions) {
     res.render("tester")
   })
 
+  router.get('/all', (req, res) => {
+    // res.status(200).send("Now let's get all the maps");
+    mapFunctions.getMaps((rows) => {
+      res.json(rows);
+    });
+  })
+
   // creates a map and redirects to url once it's done
   router.post('/', (req, res) => {
     mapFunctions.createMap(req.body.name, req.body.description, req.body.userid, (err, result) => {
@@ -19,7 +26,7 @@ module.exports = function (mapFunctions) {
     })
   })
 
-  // tabkes cookie as userid and uses it to grab favourites
+  // takes cookie as userid and uses it to grab favourites
   router.get('/favourites', (req, res) => {
     mapFunctions.findMapByFavourites(req.session.userid, (err, result) => {
       if (err) {
@@ -41,7 +48,8 @@ module.exports = function (mapFunctions) {
     })
   })
 
-  router.get('/:mapUrl', (req, res) => {
+  // NOT REQUIRED
+  /* router.get('/:mapUrl', (req, res) => {
     mapFunctions.findMapByUrl(req.params.mapUrl, (err, result) => {
       if (err) {
         console.log('error', err);
@@ -49,7 +57,7 @@ module.exports = function (mapFunctions) {
         res.json(result);
       }
     });
-  });
+  }); */
 
   // deletes a map and redirects to hopefully the index
   router.delete('/:mapurl', (req, res) => {

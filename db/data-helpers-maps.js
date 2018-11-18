@@ -37,6 +37,15 @@ module.exports = function makeMapDataHelpers(knex) {
         })
     },
 
+    getMaps: function (callback) {
+      return knex
+      .select("*")
+      .from("maps")
+      .then((rows) => {
+        callback(rows);
+      });
+    },
+
     // Delete map
     deleteMap: (mapid, callback) => {
       const mapIdInt = parseInt(mapid);

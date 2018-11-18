@@ -11,7 +11,22 @@ $(() => {
     //   // $("<div>").text(user.name).appendTo($("body"));
     // }
 
-    function createMarker(mapObj,  place) {
+    $.ajax({
+      method: "GET",
+      url: "/maps/all",
+      success: function (rows) {
+        createMapList(rows);
+      },
+    })
+
+    function createMapList(mapList) {
+      $('#map-list ul li').remove();
+      for (const map of mapList) {
+        $('#map-list ul').append(`<li class="spaced-list"><a href="#">${map.name}</a></li>`);
+      }
+    }
+
+    function createMarker(mapObj, place) {
       const div = L.DomUtil.create('div', 'popup');
       new L.Marker([place.place_lat, -place.place_long]).bindPopup(div).addTo(mapObj);
 

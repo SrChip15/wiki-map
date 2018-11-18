@@ -24,6 +24,7 @@ const indexRoutes = require("./routes/index");
 const placeRoutes = require("./routes/places");
 const mapRoutes = require("./routes/maps");
 const registerRoutes = require("./routes/register");
+const usersRoutes = require("./routes/users");
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
@@ -65,8 +66,8 @@ const usersDataHelpers = require("./db/data-helpers-users.js")(knex);
 // Mount all resource routes
 app.use("/api/users", usersRoutes(usersDataHelpers));
 app.use("/api/map/:mapId/places", placeRoutes(placesDataHelpers));
-app.use("/api/map/:mapId", mapRoutes(mapsDataHelpers));
-app.use("/maps", mapRoutes(mapsDataHelpers));
+// app.use("/api/map/:mapId", mapRoutes(mapsDataHelpers));// has not been used
+app.use("/maps", mapRoutes(mapsDataHelpers)); // maps endpoint tester form groups
 app.use("/register", registerRoutes(usersDataHelpers));
 
 // app.use("/users", usersRoutes);
