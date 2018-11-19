@@ -92,6 +92,3 @@ exports.seed = function(knex, Promise) {
 };
 
 
-.then(function () {
-      return knex('places').insert({id: , name: '', image_url: '', description: '', place_lat: , place_long: , category: '', place_url: '', map_id: });
-    })
