@@ -13,23 +13,31 @@ module.exports = function makeDataHelpers(knex) {
       category,
       placeURL,
       mapId,
+      userId,
       callback
     ) {
-      return knex("places")
-        .returning("id")
+      return knex('user_contributions')
         .insert({
-          name: name,
-          image: imageURL,
-          description: description,
-          place_lat: placeLat,
-          place_long: placeLong,
-          category: category,
-          place_url: placeURL,
+          user_id: userId,
           map_id: mapId
         })
-        .then(id => {
-          callback(id);
-        });
+        .then(() => {
+          return knex("places")
+            .returning("id")
+            .insert({
+              name: name,
+              image_url: imageURL,
+              description: description,
+              place_lat: placeLat,
+              place_long: placeLong,
+              category: category,
+              place_url: placeURL,
+              map_id: mapId
+            })
+          })
+          .then(id => {
+            callback(id);
+          });
     },
 
     // Modify place
