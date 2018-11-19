@@ -40,6 +40,7 @@ module.exports = function(DataHelpers) {
       req.body.category,
       req.body.placeURL,
       req.params.mapId,
+      req.session.user_id
       id => {
         res.status(200);
         res.send("Success!");
