@@ -34,9 +34,10 @@ module.exports = function makeDataHelpers(knex) {
               place_url: placeURL,
               map_id: mapId
             })
-            .then(id => {
-              callback(id);
-            });
+          })
+          .then(id => {
+            callback(id);
+          });
     },
 
     // Modify place
