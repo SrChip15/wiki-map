@@ -13,13 +13,13 @@ exports.seed = function(knex, Promise) {
       return knex('users').del();
     })
     .then(function () {
-      return knex('users').insert({id: 1, email: 'alice@gmail.com', password: '123456'});
+      return knex('users').insert({id: 1, email: 'alice@gmail.com', password: '123456', name: 'alice'});
     })
     .then(function () {
-      return knex('users').insert({id: 2, email: 'bob@hotmail.com', password: 'password'});
+      return knex('users').insert({id: 2, email: 'bob@hotmail.com', password: 'password', name: 'bob'});
     })
     .then(function () {
-      return knex('users').insert({id: 3, email: 'charlie@lighthouselabs.ca', password: 'RubberDuck'});
+      return knex('users').insert({id: 3, email: 'charlie@lighthouselabs.ca', password: 'RubberDuck', name: 'charlie'});
     })
     .then(function () {
       return knex('maps').insert({id: 1, url: '1jh2', name: 'Attractions', description: 'All the interesting stuff happens here'});
