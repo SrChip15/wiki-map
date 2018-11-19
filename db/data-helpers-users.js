@@ -6,7 +6,7 @@ module.exports = function makeUserDataHelpers(knex) {
       return knex('users')
         .insert({
           'email': email,
-          'password': password
+          'password': password,
           'name': name
         })
         .returning('id')
