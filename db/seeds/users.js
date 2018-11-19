@@ -67,5 +67,31 @@ exports.seed = function(knex, Promise) {
     })
     .then(function () {
       return knex('places').insert({id: 7, name: 'St. Andrew Station', image_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/St_Andrew_TTC_entrance_at_SSW.JPG/280px-St_Andrew_TTC_entrance_at_SSW.JPG', description: 'Subway Station', place_lat: 43.6476, place_long: 79.3848, category: 'service', place_url: 'http://www.ttc.ca', map_id: 3});
-    });
+    })
+    .then(function () {
+      return knex('places').insert({id: 8, name: 'Harbourfront Centre', image_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Harbourfront-Centre.jpg/330px-Harbourfront-Centre.jpg', description: 'Events by the lakeshore', place_lat: 43.6389, place_long: 79.3818, category: 'attractions', place_url: 'http://www.harbourfrontcentre.com', map_id: 1});
+    })
+    .then(function () {
+      return knex('places').insert({id: 9, name: 'Thompson Diner', image_url: 'https://media.blogto.com/uploads/2017/03/24/20170324-2048-ThompsonDiner11.jpg?h=2500&cmd=resize&quality=70&w=1400', description: 'Snazzy diner', place_lat: 43.6429, place_long: 79.4019, category: 'food', place_url: 'https://www.thompsonhotels.com/hotels/canada/toronto/thompson-toronto/restaurants/thompson-diner', map_id: 2});
+    })
+    .then(function () {
+      return knex('places').insert({id: 10, name: 'Service Ontario', image_url: 'http://www.iheartradio.ca/image/policy:1.2021295:1476308707/Service-Ontario-Outage.jpg?f=default&$p$f=f000ab6&w=800&$w=23745c3', description: 'It will take weeks for them to mail out to you', place_lat: 43.6501, place_long: 79.3768, category: 'service', place_url: 'https://www.ontario.ca/page/serviceontario', map_id: 3});
+    })
+    .then(function () {
+      return knex('places').insert({id: 11, name: 'Eaton Centre', image_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/TorontoEatonCentre2.JPG/375px-TorontoEatonCentre2.JPG', description: 'Watch out for the crowds', place_lat: 43.6544, place_long: 79.3806, category: 'shopping', place_url: 'https://www.cfshops.com/toronto-eaton-centre.html?cid=lis_tec_en_hp_gb', map_id: 4});
+    })
+    .then(function () {
+      return knex('places').insert({id: 12, name: 'First Canadian Place', image_url: 'https://media.myfirstcanadianplace.ca/first-canadian-place/building/FCP-Sunday-6705.jpg', description: 'Office with a mall underneath!', place_lat: 43.6490, place_long: 79.3818, category: 'shopping', place_url: 'https://myfirstcanadianplace.ca', map_id: 4});
+    })
+    .then(function () {
+      return knex('places').insert({id: 13, name: 'St. Lawrence Market', image_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/St._Lawrence_Market_%28Unsplash%29.jpg/330px-St._Lawrence_Market_%28Unsplash%29.jpg', description: 'Filled most of the time', place_lat: 43.6486, place_long: 79.3715, category: 'shopping', place_url: 'http://www.stlawrencemarket.com', map_id: 4});
+    })
+    .then(function () {
+      return knex('places').insert({id: 14, name: '', image_url: '', description: '', place_lat: , place_long: , category: '', place_url: '', map_id: });
+    })
 };
+
+
+.then(function () {
+      return knex('places').insert({id: , name: '', image_url: '', description: '', place_lat: , place_long: , category: '', place_url: '', map_id: });
+    })
