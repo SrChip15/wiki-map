@@ -87,8 +87,11 @@ exports.seed = function(knex, Promise) {
       return knex('places').insert({id: 13, name: 'St. Lawrence Market', image_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/St._Lawrence_Market_%28Unsplash%29.jpg/330px-St._Lawrence_Market_%28Unsplash%29.jpg', description: 'Filled most of the time', place_lat: 43.6486, place_long: 79.3715, category: 'shopping', place_url: 'http://www.stlawrencemarket.com', map_id: 4});
     })
     .then(function () {
-      return knex('places').insert({id: 14, name: '', image_url: '', description: '', place_lat: , place_long: , category: '', place_url: '', map_id: });
+      return knex('places').insert({id: 14, name: 'TIFF Bell Lightbox', image_url: 'https://img1.10bestmedia.com/Images/Photos/352132/576296-456458331037556-565090298-n_54_990x660.jpg', description: 'For the starstruck', place_lat: 43.6469, place_long: 79.3903, category: 'attractions', place_url: 'https://www.tiff.net', map_id: 1});
     })
 };
 
 
+// .then(function () {
+//       return knex('places').insert({id: , name: '', image_url: '', description: '', place_lat: , place_long: , category: '', place_url: '', map_id: });
+//     })
