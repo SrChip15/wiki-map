@@ -2,15 +2,15 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 
-module.exports = function(dataHelpers) {
-  router.get("/register", (req, res) => {
+module.exports = function (UserDataHelpers) {
+  router.get("/", (req, res) => {
     res.render("register"); // make the ejs
   });
 
   // insert the input info into database! have not done yet
   router.post("/register", (req, res) => {
     if (req.body.email && req.body.password) {
-      dataHelpers.createUser(req.body.email, req.body.password, (err, user) => {
+      UserDataHelpers.createUser(req.body.email, req.body.password, (err, user) => {
         if (err) throw err;
         console.log(user);
         // req.body.user_id = users[0]; //user the seesion later
