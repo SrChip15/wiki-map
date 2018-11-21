@@ -1,11 +1,8 @@
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcryptjs");
+
 module.exports = function(dataHelpers) {
-  //   const dataHelpers = require("../db/data-helpers-users.js")(knex);
-
-  const express = require("express");
-  const router = express.Router();
-  // const DataHelpers = require("...DataHelpers");
-  const bcrypt = require("bcryptjs");
-
   router.get("/register", (req, res) => {
     res.render("register"); // make the ejs
   });
@@ -25,5 +22,6 @@ module.exports = function(dataHelpers) {
       res.redirect("/register");
     }
   });
+
   return router;
-};
+}

@@ -4,13 +4,9 @@ const ATTRIBUTION = 'Map data &copy; <a href="https://www.openstreetmap.org/">Op
 $(() => {
   $.ajax({
     method: "GET",
-    url: "/api/map/1/places"
+    url: "/map/1/places"
   }).done((places) => {
-    // for (place of places) {
-    //   console.log(place.place_lat, place.place_long);
-    //   // $("<div>").text(user.name).appendTo($("body"));
-    // }
-
+    // Get map list
     $.ajax({
       method: "GET",
       url: "/maps/all",
