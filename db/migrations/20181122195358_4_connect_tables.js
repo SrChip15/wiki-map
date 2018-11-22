@@ -1,4 +1,3 @@
-
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('user_favourites', function(table){
     table.integer('user_id');

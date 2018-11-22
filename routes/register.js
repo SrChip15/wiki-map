@@ -8,18 +8,18 @@ module.exports = function (UserDataHelpers) {
   });
 
   // insert the input info into database! have not done yet
-  router.post("/register", (req, res) => {
+  router.post("/", (req, res) => {
+    // console.log(`Email: ${req.body.email}`);
+    // console.log(`Pwd: ${req.body.password}`);
+    res.status(200);
     if (req.body.email && req.body.password) {
       UserDataHelpers.createUser(req.body.email, req.body.password, (err, user) => {
         if (err) throw err;
-        console.log(user);
-        // req.body.user_id = users[0]; //user the seesion later
-        req.session.email = req.body.email;
-        req.session.password = req.body.password;
-        res.redirect("/login"); // to the main page??
+        console.log(`New User Created with ID#: ${user}`);
+        res.render("index");
       });
     } else {
-      res.redirect("/register");
+      res.status(401).send("Email or Password fields cannot be left blank!");
     }
   });
 

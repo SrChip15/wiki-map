@@ -1,0 +1,41 @@
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.register-form {
+  width: 100%;
+  position: relative;
+  top: 100px;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+  text-align: center;
+  line-height: 1.5em;
+}
+
+.register-form h1 {
+  font-size: 150%;
+  padding: 10px;
+}
+
+.register-form .register-button {
+  display: block;
+  width: 100%;
+  position: relative;
+  top: 20px;
+  padding: .75rem;
+  font-size: 1.25rem;
+  background-color: #007bff;
+  border-style: none;
+  border-radius: 5px;
+  border-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.register-form .register-button:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+/*# sourceMappingURL=register.css.map */

@@ -2,12 +2,11 @@ module.exports = function makeUserDataHelpers(knex) {
   return {
 
     // Create User, returns newly created user ID on success
-    createUser: (email, password, name, callback) => {
+    createUser: (email, password, callback) => {
       return knex('users')
         .insert({
           'email': email,
           'password': password,
-          'name': name
         })
         .returning('id')
         .asCallback((err, res) => {
