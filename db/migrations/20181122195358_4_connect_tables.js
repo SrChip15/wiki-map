@@ -5,17 +5,14 @@ exports.up = function(knex, Promise) {
     table.integer('map_id');
   })
   .then(function() {
+    return knex.schema.table('user_favourites', function(table) {
+      table.unique('user_id', 'map_id');
+    });
+  })
+  .then(function() {
     return knex.schema.createTable('user_contributions', function(table) {
       table.integer('user_id');
       table.integer('map_id');
-    })
-  })
-  .then(function() {
-    return knex.schema.createTable('maps', function(table){
-      table.increments();
-      table.string('url');
-      table.string('name');
-      table.string('description');
     })
   })
   .then(function() {
@@ -42,9 +39,6 @@ exports.down = function(knex, Promise) {
       table.dropForeign('user_id');
       table.dropForeign('map_id');
     })
-  })
-  .then(function() {
-    return knex.schema.dropTable('maps');
   })
   .then(function() {
     return knex.schema.dropTable('user_contributions');
