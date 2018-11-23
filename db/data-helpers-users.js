@@ -1,20 +1,35 @@
 module.exports = function makeUserDataHelpers(knex) {
   return {
-
     // Create User, returns newly created user ID on success
-    createUser: (email, password, name, callback) => {
-      return knex('users')
-        .insert({
-          'email': email,
-          'password': password,
-          'name': name
-        })
-        .returning('id')
-        .asCallback((err, res) => {
-          if (err) {
-            callback(err);
-          } else {
-            callback(null, res);
+    createUser: (email, password, callback) => {
+      knex
+        .select('*')
+        .from('users')
+        .where('email', email)
+        .andWhere('password', password)
+        .then((rows) => {
+          //check if user exists - email based
+          let userExists = false;
+          for (const user of rows) {
+            if (user.email === email) {
+              callback(-1);
+              userExists = true
+            }
+          }
+
+          if (!userExists) {
+            return knex('users')
+              .insert({
+                'email': email,
+                'password': password,
+              })
+              .returning('id')
+              .asCallback((err, id) => {
+                if (err) {
+                  callback(err);
+                }
+                callback(null, id);
+              });
           }
         });
     },

@@ -2,19 +2,18 @@ const TOKEN = 'sk.eyJ1Ijoic3JpLWRldiIsImEiOiJjam9obnhnYW4wMDl3M3Zucjh1NDJxbGZoIn
 const ATTRIBUTION = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
 
 $(() => {
-  $.ajax({
-    method: "GET",
-    url: "/map/1/places"
+  $.ajax('/map/1/places', {
+    method: 'GET',
   }).done((places) => {
     // Get map list
-    $.ajax({
-      method: "GET",
-      url: "/maps/all",
+    $.ajax('/maps/all', {
+      method: 'GET',
       success: function (rows) {
         createMapList(rows);
       },
     })
 
+    /** MAP STUFF */
     let mapUI = createNewMap();
 
     // Create markers for the 1st place in the list as default
@@ -22,7 +21,7 @@ $(() => {
       createMarker(mapUI, place);
     }
 
-    $('#map-list ul').on("click", 'li', function () {
+    $('#map-list ul').on('click', 'li', function () {
       const mapId = $(this).data("mapId");
       // alert("you clicked a map with map id = " + $(this).data("mapId"));
       $.ajax(`/maps/${mapId}`, {
@@ -38,7 +37,7 @@ $(() => {
     });
 
     function createNewMap() {
-      let mapUI = L.map("mapid", {
+      let mapUI = L.map('mapid', {
         center: [43.6426, -79.3871],
         zoom: 15,
       });

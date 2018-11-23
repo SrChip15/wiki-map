@@ -2,24 +2,32 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 
-module.exports = function(dataHelpers) {
-  router.get("/register", (req, res) => {
+module.exports = function (UserDataHelpers) {
+  router.get("/", (req, res) => {
     res.render("register"); // make the ejs
   });
 
   // insert the input info into database! have not done yet
-  router.post("/register", (req, res) => {
+  router.post("/", (req, res) => {
     if (req.body.email && req.body.password) {
-      dataHelpers.createUser(req.body.email, req.body.password, (err, user) => {
-        if (err) throw err;
-        console.log(user);
-        // req.body.user_id = users[0]; //user the seesion later
-        req.session.email = req.body.email;
-        req.session.password = req.body.password;
-        res.redirect("/login"); // to the main page??
+      UserDataHelpers.createUser(req.body.email, req.body.password, (err, userID) => {
+        if (err === -1) {
+          // existing user, suggest login
+          const templateVars = {
+            userEmail: req.body.email,
+            userPassword: req.body.password,
+          };
+          res.status(401).render('index', templateVars);
+          return;
+        } else if (err) {
+          throw err;
+        } else {
+          console.log(`New User Created with ID#: ${userID}`); // debugger
+          res.status(200).render('index');
+        }
       });
     } else {
-      res.redirect("/register");
+      res.status(401).send('Email or Password fields cannot be left blank!');
     }
   });
 
