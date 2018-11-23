@@ -9,17 +9,25 @@ module.exports = function (UserDataHelpers) {
 
   // insert the input info into database! have not done yet
   router.post("/", (req, res) => {
-    // console.log(`Email: ${req.body.email}`);
-    // console.log(`Pwd: ${req.body.password}`);
-    res.status(200);
     if (req.body.email && req.body.password) {
-      UserDataHelpers.createUser(req.body.email, req.body.password, (err, user) => {
-        if (err) throw err;
-        console.log(`New User Created with ID#: ${user}`);
-        res.render("index");
+      UserDataHelpers.createUser(req.body.email, req.body.password, (err, userID) => {
+        if (err === -1) {
+          // existing user, suggest login
+          const templateVars = {
+            userEmail: req.body.email,
+            userPassword: req.body.password,
+          };
+          res.status(401).render('index', templateVars);
+          return;
+        } else if (err) {
+          throw err;
+        } else {
+          console.log(`New User Created with ID#: ${userID}`); // debugger
+          res.status(200).render('index');
+        }
       });
     } else {
-      res.status(401).send("Email or Password fields cannot be left blank!");
+      res.status(401).send('Email or Password fields cannot be left blank!');
     }
   });
 

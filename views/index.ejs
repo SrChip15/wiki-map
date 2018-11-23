@@ -35,8 +35,12 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
       <form class="form-inline my-2 my-lg-0">
-        <input name="email" class="form-control mr-sm-1" type="email" placeholder="email" aria-label="Login" />
-        <input name="password" class="form-control mr-sm-1" type="password" placeholder="password" aria-label="password" />
+        <!-- Email input field -->
+        <input name="email" class="form-control mr-sm-1" type="email" placeholder="email" aria-label="Login" value="<%= typeof userEmail != 'undefined' ? userEmail : '' %>" />
+
+        <!-- Password input field -->
+        <input name="password" class="form-control mr-sm-1" type="password" placeholder="password" aria-label="password"
+          value="<%= typeof userPassword != 'undefined' ? userPassword : '' %>" />
         <button class="btn btn-outline-light my-2 my-sm-0" type="submit">
           Login
         </button>
