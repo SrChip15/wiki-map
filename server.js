@@ -28,7 +28,6 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
-
 app.use(
   cookieSession({
     name: "wikiMapSession",
